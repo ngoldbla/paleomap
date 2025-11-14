@@ -7,6 +7,27 @@ paleoMap
 
 `paleoMap` is a package that combines paleomaps from [GPlates](http://www.gplates.org/) with fossil records from [Paleobiology Database](http://paleobiodb.org/). It can be used to download shapefiles with reconstructions of the past configuration of the continents, and to generate paleodiversity maps.
 
+## 🌍 New: Web Application
+
+This repository now includes an interactive web application for visualizing continental drift from Pangea to present day!
+
+**Features:**
+- Interactive map viewer for different geological periods (Permian, Triassic, Jurassic, Cretaceous, etc.)
+- Continental drift animation showing the breakup of Pangea
+- Real-time data from GPlates Web Service
+- Modern responsive UI built with Next.js
+
+**Deploy to Vercel:** See [DEPLOYMENT.md](DEPLOYMENT.md) for complete deployment instructions.
+
+**Quick Start (Web App):**
+```bash
+npm install
+npm run dev
+# Open http://localhost:3000
+```
+
+---
+
 ### Quick start
 
 **Install**
