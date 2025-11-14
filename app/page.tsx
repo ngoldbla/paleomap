@@ -15,16 +15,16 @@ export default function Home() {
   const [selectedPeriod, setSelectedPeriod] = useState('Permian')
 
   return (
-    <main className="flex min-h-screen flex-col">
-      <header className="bg-gradient-to-r from-blue-900 to-blue-700 text-white p-6 shadow-lg">
+    <main className="flex h-screen flex-col overflow-hidden">
+      <header className="bg-gradient-to-r from-blue-900 to-blue-700 text-white p-6 shadow-lg flex-shrink-0">
         <h1 className="text-4xl font-bold mb-2">PaleoMap Viewer</h1>
         <p className="text-blue-100">
           Explore continental drift from Pangea to present day
         </p>
       </header>
 
-      <div className="flex-1 flex flex-col lg:flex-row">
-        <aside className="lg:w-80 bg-gray-50 dark:bg-gray-900 p-6 overflow-y-auto">
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+        <aside className="lg:w-80 bg-gray-50 dark:bg-gray-900 p-6 overflow-y-auto flex-shrink-0">
           <TimelineAnimation
             currentPeriod={selectedPeriod}
             onPeriodChange={setSelectedPeriod}
@@ -59,7 +59,7 @@ export default function Home() {
           </div>
         </aside>
 
-        <div className="flex-1 relative">
+        <div className="flex-1 relative overflow-hidden">
           <PaleoMap period={selectedPeriod} />
         </div>
       </div>

@@ -113,7 +113,7 @@ export default function PaleoMap({ period }: PaleoMapProps) {
   const periodInfo = getPeriodInfo(period)
 
   return (
-    <div className="w-full h-full relative">
+    <div className="absolute inset-0">
       <div ref={mapContainerRef} className="w-full h-full" />
 
       {/* Status overlay */}
