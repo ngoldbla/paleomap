@@ -23,14 +23,15 @@ export const PERIOD_AGES: Record<string, number> = {
 
 /**
  * Fetch paleogeographic reconstruction from GPlates Web Service
+ * Uses Next.js API route to avoid CORS issues
  */
 export async function fetchPaleoGeography(period: string): Promise<any> {
   const age = PERIOD_AGES[period] || 100
   const model = 'SETON2012'
 
   try {
-    // GPlates Web Service endpoint for coastlines
-    const url = `https://gws.gplates.org/reconstruct/coastlines/?time=${age}&model=${model}`
+    // Use our API route proxy to avoid CORS issues
+    const url = `/api/gplates/coastlines?time=${age}&model=${model}`
 
     const response = await fetch(url)
 
@@ -52,13 +53,15 @@ export async function fetchPaleoGeography(period: string): Promise<any> {
 
 /**
  * Fetch continent polygons from GPlates
+ * Uses Next.js API route to avoid CORS issues
  */
 export async function fetchContinentPolygons(period: string): Promise<any> {
   const age = PERIOD_AGES[period] || 100
   const model = 'SETON2012'
 
   try {
-    const url = `https://gws.gplates.org/reconstruct/static_polygons/?time=${age}&model=${model}`
+    // Use our API route proxy to avoid CORS issues
+    const url = `/api/gplates/polygons?time=${age}&model=${model}`
 
     const response = await fetch(url)
 
