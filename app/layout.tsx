@@ -5,8 +5,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'PaleoMap - Continental Drift Visualization',
-  description: 'Interactive paleomaps showing continental drift from Pangea to present day',
+  title: 'Continental Shift Maps - Continental Drift Visualization',
+  description: 'Interactive maps showing continental drift from Pangea to present day',
 }
 
 export default function RootLayout({

@@ -17,7 +17,7 @@ export default function Home() {
   return (
     <main className="flex h-screen flex-col overflow-hidden">
       <header className="bg-gradient-to-r from-blue-900 to-blue-700 text-white p-6 shadow-lg flex-shrink-0">
-        <h1 className="text-4xl font-bold mb-2">PaleoMap Viewer</h1>
+        <h1 className="text-4xl font-bold mb-2">Continental Shift Maps</h1>
         <p className="text-blue-100">
           Explore continental drift from Pangea to present day
         </p>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { MAJOR_PERIODS } from '@/lib/periods'
+import { fetchPaleoGeography } from '@/lib/gplates'
 
 interface TimelineAnimationProps {
   currentPeriod: string
@@ -14,6 +15,25 @@ export default function TimelineAnimation({
 }: TimelineAnimationProps) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [speed, setSpeed] = useState(2000) // milliseconds per period
+
+  // Preload adjacent periods in the background for smoother animation
+  useEffect(() => {
+    const currentIndex = MAJOR_PERIODS.indexOf(currentPeriod)
+    if (currentIndex === -1) return
+
+    // Preload next 2 periods
+    const preloadPeriods = [
+      MAJOR_PERIODS[(currentIndex + 1) % MAJOR_PERIODS.length],
+      MAJOR_PERIODS[(currentIndex + 2) % MAJOR_PERIODS.length]
+    ]
+
+    preloadPeriods.forEach(period => {
+      // Fire and forget - this will cache the data for later use
+      fetchPaleoGeography(period).catch(err => {
+        console.log(`Background preload failed for ${period}:`, err)
+      })
+    })
+  }, [currentPeriod])
 
   useEffect(() => {
     if (!isPlaying) return

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { fetchPaleoGeography, fetchContinentPolygons, getPeriodInfo } from '@/lib/gplates'
+import { fetchPaleoGeography, getPeriodInfo, rotateGeoJSON, PERIOD_ROTATIONS } from '@/lib/gplates'
 
 interface PaleoMapProps {
   period: string
@@ -47,12 +47,16 @@ export default function PaleoMap({ period }: PaleoMapProps) {
           mapRef.current?.removeLayer(geoJsonLayerRef.current)
         }
 
-        // Fetch coastline data from GPlates
+        // Fetch coastline data from GPlates (uses cache automatically)
         const coastlineData = await fetchPaleoGeography(period)
 
         if (coastlineData.features && coastlineData.features.length > 0) {
+          // Apply rotation to orient map horizontally
+          const rotationAngle = PERIOD_ROTATIONS[period] || 0
+          const rotatedData = rotateGeoJSON(coastlineData, rotationAngle)
+
           // Create GeoJSON layer with styling
-          geoJsonLayerRef.current = L.geoJSON(coastlineData, {
+          geoJsonLayerRef.current = L.geoJSON(rotatedData, {
             style: {
               color: '#2c5f2d',
               weight: 1,
@@ -74,10 +78,13 @@ export default function PaleoMap({ period }: PaleoMapProps) {
             }
           }).addTo(mapRef.current)
 
-          // Fit map to bounds of the data
+          // Fit map to bounds of the data with generous padding to fill viewport
           const bounds = geoJsonLayerRef.current.getBounds()
           if (bounds.isValid()) {
-            mapRef.current.fitBounds(bounds, { padding: [50, 50] })
+            mapRef.current.fitBounds(bounds, {
+              padding: [20, 20],
+              maxZoom: 3 // Limit zoom to ensure map fills viewport
+            })
           }
         } else {
           setError('No paleogeographic data available for this period')
