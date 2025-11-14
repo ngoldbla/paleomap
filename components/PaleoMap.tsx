@@ -21,13 +21,24 @@ export default function PaleoMap({ period }: PaleoMapProps) {
 
     // Initialize map only once
     if (!mapRef.current) {
+      // Define world bounds to restrict panning
+      const worldBounds = L.latLngBounds(
+        L.latLng(-90, -180), // Southwest corner
+        L.latLng(90, 180)    // Northeast corner
+      )
+
       mapRef.current = L.map(mapContainerRef.current, {
         center: [0, 0],
         zoom: 2,
-        minZoom: 1,
+        minZoom: 2,
         maxZoom: 6,
         zoomControl: true,
         attributionControl: true,
+        maxBounds: worldBounds,
+        maxBoundsViscosity: 1.0, // Makes bounds completely rigid (1.0 = no panning outside bounds)
+        worldCopyJump: false, // Disable map wrapping/looping
+        zoomSnap: 0.5, // Allow smoother zoom levels
+        zoomDelta: 0.5,
       })
 
       // Ocean background - using plain color instead of tiles
@@ -74,11 +85,12 @@ export default function PaleoMap({ period }: PaleoMapProps) {
             }
           }).addTo(mapRef.current)
 
-          // Fit map to bounds of the data
-          const bounds = geoJsonLayerRef.current.getBounds()
-          if (bounds.isValid()) {
-            mapRef.current.fitBounds(bounds, { padding: [50, 50] })
+          // Keep view consistent for continental drift visualization
+          // Reset to default world view if this is the first load
+          if (mapRef.current.getZoom() === 2) {
+            mapRef.current.setView([0, 0], 2, { animate: false })
           }
+          // Otherwise maintain user's current view to track continental shift
         } else {
           setError('No paleogeographic data available for this period')
         }
