@@ -27,7 +27,8 @@ export const PERIOD_AGES: Record<string, number> = {
  */
 export async function fetchPaleoGeography(period: string): Promise<any> {
   const age = PERIOD_AGES[period] || 100
-  const model = 'SETON2012'
+  // Use MULLER2022 model which supports 0-1000 Ma (covers all our periods including Permian and Triassic)
+  const model = 'MULLER2022'
 
   try {
     // Use our API route proxy to avoid CORS issues
@@ -57,7 +58,8 @@ export async function fetchPaleoGeography(period: string): Promise<any> {
  */
 export async function fetchContinentPolygons(period: string): Promise<any> {
   const age = PERIOD_AGES[period] || 100
-  const model = 'SETON2012'
+  // Use MULLER2022 model which supports 0-1000 Ma (covers all our periods including Permian and Triassic)
+  const model = 'MULLER2022'
 
   try {
     // Use our API route proxy to avoid CORS issues

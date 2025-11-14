@@ -4,7 +4,7 @@ export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams
     const time = searchParams.get('time')
-    const model = searchParams.get('model') || 'SETON2012'
+    const model = searchParams.get('model') || 'MULLER2022'
 
     if (!time) {
       return NextResponse.json(
