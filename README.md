@@ -14,8 +14,25 @@ This repository now includes an interactive web application for visualizing cont
 **Features:**
 - Interactive map viewer for different geological periods (Permian, Triassic, Jurassic, Cretaceous, etc.)
 - Continental drift animation showing the breakup of Pangea
-- Real-time data from GPlates Web Service
-- Modern responsive UI built with Next.js
+- Real-time data from GPlates Web Service API
+- Modern responsive UI built with Next.js and Leaflet
+- Server-side API proxy to handle CORS and optimize performance
+- Automatic caching for improved load times
+
+**Architecture:**
+- **Frontend:** Next.js 14 with React and TypeScript
+- **Mapping:** Leaflet for interactive map visualization
+- **Data Source:** [GPlates Web Service API](https://gwsdoc.gplates.org/) (SETON2012 model)
+- **API Proxy:** Next.js API routes (`/api/gplates/*`) proxy requests to GPlates to avoid CORS issues
+
+**How It Works:**
+The application uses Next.js API routes to proxy requests to the GPlates Web Service API. This solves CORS restrictions that prevent direct browser access to the GPlates API:
+
+```
+Browser → /api/gplates/coastlines → GPlates API → Response
+```
+
+The proxy routes are located in `app/api/gplates/` and handle both coastlines and continent polygons reconstruction data.
 
 **Deploy to Vercel:** See [DEPLOYMENT.md](DEPLOYMENT.md) for complete deployment instructions.
 
@@ -25,6 +42,10 @@ npm install
 npm run dev
 # Open http://localhost:3000
 ```
+
+**API Endpoints:**
+- `/api/gplates/coastlines?time={age}&model={model}` - Fetch coastline reconstructions
+- `/api/gplates/polygons?time={age}&model={model}` - Fetch continent polygon reconstructions
 
 ---
 
