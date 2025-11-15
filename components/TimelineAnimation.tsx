@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { MAJOR_PERIODS } from '@/lib/periods'
+import { usePrefetchAdjacentPeriods, useFetchTiming } from '@/hooks/usePaleoGeography'
 
 interface TimelineAnimationProps {
   currentPeriod: string
@@ -15,20 +16,30 @@ export default function TimelineAnimation({
   const [isPlaying, setIsPlaying] = useState(false)
   const [speed, setSpeed] = useState(2000) // milliseconds per period
 
+  // Prefetch adjacent periods when playing for smooth transitions
+  usePrefetchAdjacentPeriods(currentPeriod, isPlaying)
+
+  // Get fetch timing for adaptive behavior
+  const { isFetching } = useFetchTiming(currentPeriod)
+
   useEffect(() => {
     if (!isPlaying) return
 
     const currentIndex = MAJOR_PERIODS.indexOf(currentPeriod)
     if (currentIndex === -1) return
 
+    // Adaptive timing: use base speed, but add extra time if data is still being fetched
+    // This ensures we don't transition before the next period is ready
+    const adaptiveSpeed = isFetching ? speed + 500 : speed
+
     const timer = setTimeout(() => {
       // Move to next period, or loop back to start
       const nextIndex = (currentIndex + 1) % MAJOR_PERIODS.length
       onPeriodChange(MAJOR_PERIODS[nextIndex])
-    }, speed)
+    }, adaptiveSpeed)
 
     return () => clearTimeout(timer)
-  }, [isPlaying, currentPeriod, speed, onPeriodChange])
+  }, [isPlaying, currentPeriod, speed, onPeriodChange, isFetching])
 
   const handlePlayPause = () => {
     setIsPlaying(!isPlaying)
@@ -91,8 +102,18 @@ export default function TimelineAnimation({
       </div>
 
       {/* Timeline indicator */}
-      <div className="text-xs text-gray-600 dark:text-gray-300">
-        Period {currentIndex + 1} of {MAJOR_PERIODS.length}
+      <div className="text-xs text-gray-600 dark:text-gray-300 space-y-1">
+        <div>Period {currentIndex + 1} of {MAJOR_PERIODS.length}</div>
+        {isPlaying && isFetching && (
+          <div className="text-blue-600 dark:text-blue-400">
+            ⏳ Prefetching next period...
+          </div>
+        )}
+        {isPlaying && !isFetching && (
+          <div className="text-green-600 dark:text-green-400">
+            ✓ Ready for smooth transition
+          </div>
+        )}
       </div>
     </div>
   )

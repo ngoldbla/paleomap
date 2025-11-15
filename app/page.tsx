@@ -4,6 +4,7 @@ import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import TimePeriodSelector from '@/components/TimePeriodSelector'
 import TimelineAnimation from '@/components/TimelineAnimation'
+import FossilControls from '@/components/FossilControls'
 
 // Dynamically import the map component to avoid SSR issues with Leaflet
 const PaleoMap = dynamic(() => import('@/components/PaleoMap'), {
@@ -13,6 +14,8 @@ const PaleoMap = dynamic(() => import('@/components/PaleoMap'), {
 
 export default function Home() {
   const [selectedPeriod, setSelectedPeriod] = useState('Permian')
+  const [selectedTaxa, setSelectedTaxa] = useState<string[]>([])
+  const [fossilCounts, setFossilCounts] = useState<Record<string, number>>({})
 
   return (
     <main className="flex h-screen flex-col overflow-hidden">
@@ -34,6 +37,14 @@ export default function Home() {
             <TimePeriodSelector
               selectedPeriod={selectedPeriod}
               onPeriodChange={setSelectedPeriod}
+            />
+          </div>
+
+          <div className="mt-6">
+            <FossilControls
+              selectedTaxa={selectedTaxa}
+              onTaxaChange={setSelectedTaxa}
+              fossilCounts={fossilCounts}
             />
           </div>
 
@@ -60,7 +71,11 @@ export default function Home() {
         </aside>
 
         <div className="flex-1 relative overflow-hidden">
-          <PaleoMap period={selectedPeriod} />
+          <PaleoMap
+            period={selectedPeriod}
+            selectedTaxa={selectedTaxa}
+            onFossilCountsChange={setFossilCounts}
+          />
         </div>
       </div>
     </main>
