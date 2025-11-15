@@ -83,10 +83,14 @@ export default function PaleoMap({ period, selectedTaxa, onFossilCountsChange }:
         }
       }).addTo(mapRef.current)
 
-      // Fit map to bounds of the data
+      // Fit map to bounds of the data - fill viewport better
       const bounds = newLayer.getBounds()
       if (bounds.isValid()) {
-        mapRef.current.fitBounds(bounds, { padding: [50, 50] })
+        // Use minimal padding and maxZoom to fill viewport while showing all data
+        mapRef.current.fitBounds(bounds, {
+          padding: [20, 20],
+          maxZoom: 3, // Prevent over-zooming on small landmasses
+        })
       }
 
       // Smooth transition: fade out old, fade in new
