@@ -13,7 +13,7 @@ const PaleoMap = dynamic(() => import('@/components/PaleoMap'), {
 })
 
 export default function Home() {
-  const [selectedPeriod, setSelectedPeriod] = useState('Permian')
+  const [selectedPeriod, setSelectedPeriod] = useState('Cretaceous')
   const [selectedTaxa, setSelectedTaxa] = useState<string[]>(['Dinosauria']) // Enable dinosaurs by default
   const [fossilCounts, setFossilCounts] = useState<Record<string, number>>({})
 
@@ -70,7 +70,7 @@ export default function Home() {
           </div>
         </aside>
 
-        <div className="flex-1 relative overflow-hidden">
+        <div className="flex-1 relative overflow-hidden min-w-0 min-h-0">
           <PaleoMap
             period={selectedPeriod}
             selectedTaxa={selectedTaxa}

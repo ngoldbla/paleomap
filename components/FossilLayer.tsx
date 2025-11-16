@@ -61,6 +61,7 @@ export default function FossilLayer({ map, taxon, period, onCountChange }: Fossi
         weight: 1,
         opacity: 0.8,
         fillOpacity: 0.6,
+        pane: 'markerPane', // Ensure markers appear above polygons
       })
 
       // Add popup with fossil information
