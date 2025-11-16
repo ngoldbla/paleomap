@@ -14,7 +14,7 @@ const PaleoMap = dynamic(() => import('@/components/PaleoMap'), {
 
 export default function Home() {
   const [selectedPeriod, setSelectedPeriod] = useState('Permian')
-  const [selectedTaxa, setSelectedTaxa] = useState<string[]>([])
+  const [selectedTaxa, setSelectedTaxa] = useState<string[]>(['Dinosauria']) // Enable dinosaurs by default
   const [fossilCounts, setFossilCounts] = useState<Record<string, number>>({})
 
   return (
